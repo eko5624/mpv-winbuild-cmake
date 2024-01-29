@@ -1,0 +1,70 @@
+name: mpv clang
+defaults:
+  run:
+    shell: bash
+
+on:
+  workflow_dispatch:
+    inputs:
+      command:
+        description: 'Run custom command before building'
+        required: false
+        type: string
+      sourceforge:
+        description: 'Upload to Sourceforge'
+        required: false
+        default: false
+        type: boolean
+      github_release:
+        description: 'Upload to Github release'
+        required: false
+        default: false
+        type: boolean
+      mpv_tarball:
+        description: 'Build latest mpv tarball'
+        required: false
+        default: false
+        type: boolean
+
+jobs:
+  build_mpv:
+    name: Building mpv
+    runs-on: ubuntu-latest
+    container:
+      image: docker://ghcr.io/eko5624/archlinux:latest
+    steps:  
+      - name: Setup git config
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global pull.rebase true
+          git config --global rebase.autoStash true
+          git config --global fetch.prune true
+          git config --global --add safe.directory $PWD
+
+      - uses: actions/checkout@main
+        with:
+          ref: master
+
+      - name: Loading clang sysroot cache
+        uses: actions/cache/restore@main
+        with:
+          path: |
+            clang_root
+          key: ${{ secrets.CACHE_VERSION }}-clang_root-${{ github.run_id }}
+          restore-keys: |
+            ${{ secrets.CACHE_VERSION }}-clang_root
+
+      - name: Get clang_root cache
+        run: |
+          7z a cache-clang_root.7z clang_root/*
+          
+      - name: Release
+        continue-on-error: true
+        uses: softprops/action-gh-release@master
+        with:
+          tag_name: toolchain
+          name: toolchain
+          files: cache*.7z
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
