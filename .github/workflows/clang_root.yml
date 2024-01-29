@@ -5,26 +5,6 @@ defaults:
 
 on:
   workflow_dispatch:
-    inputs:
-      command:
-        description: 'Run custom command before building'
-        required: false
-        type: string
-      sourceforge:
-        description: 'Upload to Sourceforge'
-        required: false
-        default: false
-        type: boolean
-      github_release:
-        description: 'Upload to Github release'
-        required: false
-        default: false
-        type: boolean
-      mpv_tarball:
-        description: 'Build latest mpv tarball'
-        required: false
-        default: false
-        type: boolean
 
 jobs:
   build_mpv:
