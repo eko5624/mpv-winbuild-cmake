@@ -26,7 +26,7 @@ jobs:
         with:
           ref: master
 
-      - name: Loading x86_64_v3 toolchain cache
+      - name: Loading x86_64 toolchain cache
         uses: actions/cache/restore@main
         with:
           path: |
