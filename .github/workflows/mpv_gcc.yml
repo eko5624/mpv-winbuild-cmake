@@ -33,7 +33,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        bit: [x86_64]
+        bit: [x86_64, x86_64_v3]
     env:
       BIT: ${{ matrix.bit }}
     container:
