@@ -1,4 +1,4 @@
-name: clang-x86_64_toolchain
+name: gcc-x86_64_toolchain
 defaults:
   run:
     shell: bash
